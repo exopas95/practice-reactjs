@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        function App () {
+            const [index, setIndex] = React.useState("xxx");
+            const onSelect = (event) =>{
+                setIndex(event.target.value)
+            }
+            return (
+                <div>
+                    <h1>Super Convertor</h1>
+                    <select value={index} onChange={onSelect}>
+                        <option value="xx">Select your units</option>
+                        <option value="0">Minutes & Hours</option>
+                        <option value="1">Km & Miles</option>
+                    </select>
+                    <hr/>
+                    {index === "xxx" ? "Please select your units" : null}
+                    {index === "0" ? <MinutesToHours/> : null}
+                    {index === "1" ? <KmToMiles/> : null}
+                </div>
+            )
+        }
+        function KmToMiles() {
+            return (
+                <h3>KM 2 M</h3>
+
+            )
+        }
+        function MinutesToHours() {
+            const [amount, setAmount] = React.useState(0);
+            const [flipped, setFlip] = React.useState(false);
+            const onChange = (event) => {
+                // console.log(event.target.value)
+                setAmount(event.target.value);
+            }
+            const reset = () => setAmount(0);
+            const onFlip = () => {
+                setFlip((current) => !current);
+                reset();
+            }
+            
+            // JSX 에서는 문법이 조금 다름
+            // class -> class Name, for -> htmlFor 로 바꿔서 넣어주어야 한다.
+            // class & for는 javascript 언어이기 때문
+            return(
+                <div>
+                    <div>
+                        <label htmlFor="minutes">Minutes</label>
+                        <input value={flipped ? Math.round(amount * 60) : amount} id="minutes" placeholder="Minutes" type="number" onChange={onChange} disabled={flipped == true}/>
+                    </div>
+                    <div>
+                        <label htmlFor="hours">Hours</label>
+                        <input value={flipped ? amount : Math.round(amount / 60)} id="hours" placholder="Hours" type="number" onChange={onChange} disabled={flipped == false}/>
+                    </div>
+                    <div>
+                         <button onClick={reset}>Reset</button>
+                         <button onClick={onFlip}>Filp</button>
+                    </div>
+ 
+                </div>
+            )
+        }
+        const root = document.getElementById("root");
+        ReactDOM.render(<App/>, root);
+    </script>
+</html>
