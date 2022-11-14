@@ -1,0 +1,21 @@
+<!--
+    ReactNavte에 JSX를 적용하여 어떻게 더 쉽게 코드를 작성하는지 살펴본다.
+    Browser는 JSX를 이해하지 못하기 때문에 이를 변환해주는 Babel을 사용해야 한다.
+-->
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");
+        const Title = () => <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>Hello I'm a title</h3>
+        const Button = () => <button style={{backgroundColor: "tomato"}} onClick={() => console.log("I'm clicked")}>CLick me</button>
+        const Container = () => <div><Title/><Button/></div>      // 함수 태그는 무조건 대문자로 시작해야 한다.
+        ReactDOM.render(<Container/>, root)
+    </script>
+</html>
