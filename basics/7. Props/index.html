@@ -1,0 +1,47 @@
+<!-- 
+    props로 fucntion을 전달하는 방법을 배운다.
+    커스텀 컴포넌트에 onCLick을 넣으면, 이것은 이벤트 리스너가 아니라 그냥 props임
+    html에서 onClick을 실행하는 것과 다르니 유의하자. 당연히 이름도 바꿀 수 있다.
+
+    App()의 state가 바뀌게 되면 App에서 그려지는 모든 컴포넌트들은 rerendered된다.
+    그러나 두 번째 Btn의 경우 아무런 값이 변하지 않았는데도 렌덜링이 다시 되어야 한다.
+    이를 방지하기 위하여 Memo(memorize) 기능을 사용한다.
+-->
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        function Btn({text, onClick}) {
+            return (
+                <button
+                onClick={onClick} 
+                style={{
+                    backgroundColor: "tomato",
+                    color: "white",
+                    padding: "10px 20px",
+                    border: 0,
+                    borderRadius: 10,
+                }}>{text}</button>
+            )
+        }
+        const MemorizedBtn = React.memo(Btn)
+        function App () {
+            const [value, setValue] = React.useState("Save Chnages");
+            const changeValue = () => setValue("Revert Changes");
+            return (
+                <div>
+                    <MemorizedBtn text={value} onClick={changeValue} />
+                    <MemorizedBtn text={value} />
+                </div>
+            )
+        }
+        const root = document.getElementById("root");
+        ReactDOM.render(<App/>, root);
+    </script>
+</html>

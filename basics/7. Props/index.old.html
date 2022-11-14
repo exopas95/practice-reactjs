@@ -1,0 +1,37 @@
+<!-- 
+    Props - 부모 컴포넌트에서 자식 컴포넌트로 데이터 전달하는 방법
+    App() 에서 컴포넌트를 호출할 때 인자를 넘겨주면 컴포넌트는 이것을 prop로 받게 된다.
+    props는 one and only object!
+    props로 인자를 전달해도 되고, { banana }로 특정 값만 인자로 전달할 수도 있다.
+-->
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        function Btn(props) {
+            return <button style={{
+                backgroundColor: "tomato",
+                color: "white",
+                padding: "10px 20px",
+                border: 0,
+                borderRadius: 10,
+            }}>{props.banana}</button>;
+        }
+        function App () {
+            return (
+                <div>
+                    <Btn banana="Save Changes"/>
+                    <Btn banana="Continue"/>
+                </div>
+            )
+        }
+        const root = document.getElementById("root");
+        ReactDOM.render(<App/>, root);
+    </script>
+</html>
