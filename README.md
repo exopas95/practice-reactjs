@@ -516,3 +516,6 @@ export default App;
 -   각 컴포넌트의 css는 컴포넌트명.module.css로 만들어서 컴포넌트 단위로 설정할 수 있다.
 
 ## Content - React Practice
+
+지금까지 배운 내용들은 모두 Moview App을 구현하면서 적용이 되었다.
+추가적으로 라우터간의 이동과 API 호출하는 방법 또한 다루어져 있으니 자세한 내용은 코드를 살펴보길 바란다.
