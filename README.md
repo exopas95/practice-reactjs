@@ -9,6 +9,8 @@
 3.  React State
 4.  React Practice - Creating Unit Convertor
 5.  Prop
+6.  userEffect
+7.  Deps
 
 ### 1. Vanilla JS vs React
 
@@ -75,7 +77,7 @@ JavaScript는 기본적으로 아래와 같은 순서를 따라서 html에 내�
 </html>
 ```
 
-### 3. React JSX
+### 2. React JSX
 
 위 방식대로 코드를 작성하면 너무 지저분해진다. 이를 해결하기 위해 JSX를 사용해서 코드를 작성한다. JSX를 사용하면 스크립 안에서 컴포넌트를 생성하고 HTML 태그를 리턴할 수 있다. 이때 브라우저는 JSX를 이해하지 못하기 때문에 이를 변환해주는 **Babel**을 사용해야 한다.
 
@@ -113,7 +115,7 @@ JavaScript는 기본적으로 아래와 같은 순서를 따라서 html에 내�
 </html>
 ```
 
-### 4. React State
+### 3. React State
 
 이제 버튼을 클릭하면 숫자가 계속 증가하는 기능을 구현해본다. 버튼을 누를때마다 숫자가 증가하여야 하는데 브라우저는 이것을 알 수가 없다. 따라서 숫자가 바뀔때마다 렌더링을 계속 다시하면서 늘어난 숫자를 보여주어야한다. 그렇지만 매번 새로운 컴포넌트를 추가할 때마다 렌더링을 위한 함수를 실행시키는건 매우 불편하다.
 
@@ -178,7 +180,7 @@ JavaScript는 기본적으로 아래와 같은 순서를 따라서 html에 내�
 </html>
 ```
 
-### 5. React Practice - Creating Unit Convertor
+### 4. React Practice - Creating Unit Convertor
 
 앞에서 배운 내용을 토대로 단위 변환기를 만들어 본다. 여기서 주의할 것은, JSX로 selector를 넘길때는 `class`가 아닌 `className`처럼 javascript와는 다른 문법을 사용해서 이를 생성해야 한다. 자세한 내용은 JSX 문서를 살펴보자.
 
@@ -327,7 +329,7 @@ JavaScript는 기본적으로 아래와 같은 순서를 따라서 html에 내�
 </html>
 ```
 
-### 6. Props
+### 5. Props
 
 이번엔 부모 컴포넌트에서 자식 컴포넌트로 데이터를 전달하는 방법을 배운다. `App()` 에서 컴포넌트를 호출할 때 인자를 넘겨주게 되면 컴포넌트는 이것을 `props`으로 받게 된다. 이때 `props`는 "One and Only Object" 이기 때문에 여러개를 보내도 하나의 props object에 존재하게 된다. `props`로 인자를 전달받고 `props.text` 등으로 접근하여도 되지만, `{ text }`로 props 인자를 받는 것을 생략하고 데이터를 바로 받는 방법도 존재한다.
 
@@ -414,3 +416,103 @@ JavaScript는 기본적으로 아래와 같은 순서를 따라서 html에 내�
     </script>
 </html>
 ```
+
+### 6. useEffect
+
+state를 적용한 컴포넌트는 매번 값이 바뀔때마다 리렌더링되면서 괄호 안의 모든 내용이 다시 실행된다. 이때 API콜 함수가 컴포넌트 안에 있다면, 굳이 API콜을 하지 않아도 되는 경우에도 값이 바뀔때마다 매번 함수를 실행하게 된다. 이를 방지하기 위하여 useEffect를 사용한다.
+
+useEffect는 두 인자로 이루어져 있으며, 첫 번째 인자는 최초 렌더링에서만 실행하고 싶은 함수명을, 두 번째 인자로는 Dependency array를 입력 받는다.
+
+```javascript
+import Button from "./Button";
+import styles from "./App.module.css";
+import { useState, useEffect } from "react";
+
+function App() {
+    const [counter, setValue] = useState(0);
+    const onClick = () => setValue((prev) => prev + 1);
+    console.log("I run all the time");
+
+    const iRunOnlyOnce = () => {
+        console.log("I run only once");
+    };
+
+    useEffect(iRunOnlyOnce, []);
+    useEffect(() => {
+        console.log("CALL THE API...");
+    }, []);
+
+    return (
+        <div>
+            <h1>{counter}</h1>
+            <button onCLick={onClick}>click me</button>
+        </div>
+    );
+}
+
+export default App;
+```
+
+최초 렌더링에서만 실행하고 싶은 경우 이외에도, state별로 구분해서 각기 다르게 렌더링을 하고 싶을 때도 있다. 예를 들어 검색 기능을 만들고 state로 키워드를 업데이트하고 있을 경우, 버튼을 클릭하면 `setValue`가 작동하면서 state에 변화가 일어나고, 이는 모든 state들을 다시 업데이트하게 만든다. 이를 구별해서, `keyword`에 변화가 있을 때, keyword와 관련된 state만 업데이트하고 싶을 경우, 즉 코드의 특정 부분이 변화했고 그 부분만 업데이트하고 싶을 경우 `dependency`를 설정해준다. keyword의 경우 dependency `[keyword]`를 넣어준다.
+
+```javascript
+import Button from "./Button";
+import styles from "./App.module.css";
+import { useState, useEffect } from "react";
+
+function App() {
+    const [counter, setValue] = useState(0);
+    const [keyword, setKeyword] = useState("");
+
+    const onClick = () => setValue((prev) => prev + 1);
+    const onChange = (event) => setKeyword(event.target.value);
+
+    const iRunOnlyOnce = () => {
+        console.log("I run only once");
+    };
+
+    useEffect(iRunOnlyOnce, []);
+
+    useEffect(() => {
+        console.log("CALL THE API...");
+    }, []);
+
+    useEffect(() => {
+        if (keyword !== "" && keyword.length > 3) {
+            console.log("SEARCH FOR", keyword);
+        }
+    }, [keyword]);
+
+    return (
+        <div>
+            <input
+                value={keyword}
+                onChange={onChange}
+                type="text"
+                placeholder="Search here..."
+            />
+            <h1>{counter}</h1>
+            <button onCLick={onClick}>click me</button>
+        </div>
+    );
+}
+
+export default App;
+```
+
+## Content - React App Basic
+
+리엑트 앱을 어떻게 세팅하는지 살펴본다. 먼저 다음 코드를 실행하여 리엑트 앱을 생성한다.
+
+> npx create-react-app { app name }
+
+추가로 props 타입 지정을 위한 prop-types도 설치한다.
+
+> npm install prop-types
+
+이후 불필요한 파일은 삭제하고 컴포넌트별로 프로젝트를 관리한다.
+
+-   컴포넌트 단위로 js파일을 만들고 이를 App.js 에서 import 해서 사용한다.
+-   각 컴포넌트의 css는 컴포넌트명.module.css로 만들어서 컴포넌트 단위로 설정할 수 있다.
+
+## Content - React Practice
