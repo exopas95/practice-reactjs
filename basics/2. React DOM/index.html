@@ -1,0 +1,27 @@
+<!--
+    Javascript는 HTML 만들고 -> 태그를 찾고 -> 태그 안의 내용을 바꾸는 식이다.
+    그러나 React는 반대로 작동한다.
+    React는 HTML을 업데이트 시키고 -> 태그를 찾고 -> HTML을 만든다.
+-->
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script>
+        const root = document.getElementById("root");
+        const h3 = React.createElement("h3", {
+            onMouseEnter: () => {
+                console.log("moulse enter");
+            }
+        }, "Hello I'm a span" );
+        const btn = React.createElement("button", {
+            onClick: () => console.log("I'm clicked")
+        }, "Click me");
+        const container = React.createElement("div", null, [h3, btn])
+        ReactDOM.render(container, root)
+    </script>
+</html>
