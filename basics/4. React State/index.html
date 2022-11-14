@@ -1,0 +1,38 @@
+<!--
+    React는 이전에 렌더링된 컴포넌트가 어떤것인지 기억하고 있다.
+    즉, 전체 화면을 계속 반복해서 렌더링할 필요가 없다는 뜻이다.
+    바뀐 부분만 렌더링 하면 됨!!
+-->
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");
+        
+
+        // modifier 함수를 사용해서 state을 바꾸면 App()이 한 번 더 실행됨
+        // 그런데 counter 값만 달라짐
+        // 그리고 그 달라진 값을 가지고 rerendering을 하게 됨
+        function App() {
+            const [counter, setCounter] = React.useState(0);
+            const onClick = () => {
+                //setCounter(counter + 1);
+                setCounter((current) => current + 1);
+            }
+
+            return(
+                <div>
+                    <h3>Total clicks: {counter}</h3>
+                    <button onClick={onClick}>Click me</button>
+                </div>
+            )
+        }
+        ReactDOM.render(<App/>, root);
+    </script>
+</html>
